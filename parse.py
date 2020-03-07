@@ -159,9 +159,6 @@ def tableToJson(folder):
     f = open(WEIGHTS, "w")
     f.write(js.dumps(weightsJson, indent=2))
     f.close()
-    return True
-
-tableToJson("data")
 
 def main(folder):
     print("Parse.py is running...\n")
