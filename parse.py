@@ -1,5 +1,6 @@
 #!/usr/bin/python3.7
 import sys
+import os
 import json as js
 import numpy as np
 import pandas as pd
@@ -74,7 +75,7 @@ days = [
 ]
 
 # error handling
-errorMessage = "Error: Main method terminated unexpectedly."
+errorMessage = "Error: Main method terminated unexpectedly.\nPlease make sure your Python version is 3.7 or above."
 
 # create table from spreadsheet
 def createTable(worksheet):
@@ -161,12 +162,10 @@ def tableToJson(folder):
     f.close()
 
 def main(folder):
-    print("Parse.py is running...\n")
+    print(os.path.basename(__file__) + " is running...\n")
     try:
         tableToJson(folder)
         print("JSON files created.")
-    except PermissionError:
-        print("Error: Permission denied.")
     except Exception:
         print(errorMessage)
     except:
@@ -177,7 +176,6 @@ if __name__ == "__main__":
         folder = sys.argv[1]
         main(folder)
     except:
-        print("Usage: py parse.py <folder>")
-
+        print("Usage: python parse.py <folder>")
 
 # TODO: dynamic gym id, autoname id_startDate_endDate.json
