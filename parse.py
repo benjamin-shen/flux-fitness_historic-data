@@ -71,7 +71,7 @@ days = [
     "Thursday",
     "Friday",
     "Saturday",
-    "Sunday",    
+    "Sunday",
 ]
 
 # error handling
@@ -91,7 +91,7 @@ def createJson(data,json):
     dayMap = {}
     for i in range(7):
         dayMap[header[i]] = days[i]
-    
+
     for m in data: # dictionary of dates:count
         i = m.pop("index")
         for key in m:
@@ -128,7 +128,11 @@ def tableToJson(folder):
         errorMessage = "Error: Folder has no content."
         raise Exception
 
-    json = {
+    cardioJson = {
+        "id": "noyes",
+        "history": {}
+    }
+    weightsJson = {
         "id": "noyes",
         "history": {}
     }
@@ -141,7 +145,7 @@ def tableToJson(folder):
         if len(cardioData) != 36 or len(cardioData[0]) != 8:
             errorMessage = "Error: Invalid cardio spreadsheet format."
             raise Exception
-        cardioJson = createJson(cardioData,json)
+        cardioJson = createJson(cardioData,cardioJson)
 
         # weights
         weightsSheet = pd.read_excel(filename,SHEET_NAME,usecols=WEIGHTS_COLS,header=HEADER)
@@ -151,12 +155,12 @@ def tableToJson(folder):
         if len(weightsData) != 36 or len(weightsData[0]) != 8:
             errorMessage = "Error: Invalid weights spreadsheet format."
             raise Exception
-        weightsJson = createJson(weightsData,json)    
+        weightsJson = createJson(weightsData,weightsJson)
 
     f = open(CARDIO, "w")
     f.write(js.dumps(cardioJson, indent=2))
     f.close()
-    
+
     f = open(WEIGHTS, "w")
     f.write(js.dumps(weightsJson, indent=2))
     f.close()
