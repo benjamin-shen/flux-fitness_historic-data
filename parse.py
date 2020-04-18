@@ -19,9 +19,21 @@ START_ROW = 0
 END_ROW = 35
 
 # write destinations
+FOLDER = "data/"
 CARDIO = "cardio.json"
 WEIGHTS = "weights.json"
 
+# Cornell gyms
+GYMS = {
+    "appel": "Appel",
+    "helennewman": "HelenNewman",
+    "helen-newman": "HelenNewman",
+    "noyes": "Noyes",
+    "teagleup": "TeagleUp",
+    "teagle-up": "TeagleUp",
+    "teagledown": "TeagleDown",
+    "teagle-down": "TeagleDown",
+}
 
 # time mapping from 6:15am to 11:45pm in 30min intervals
 # I used a list because the keys are indices (ints 0 through 35)
@@ -120,12 +132,12 @@ def createJson(data,json):
             pass
     return json
 
-def tableToJson(folder):
+def tableToJson(gym, folder):
     global errorMessage
 
     files = glob.glob(folder + "/*.xls")
     if len(files) == 0:
-        errorMessage = "Error: Folder has no content."
+        errorMessage = "Error: Folder has no .xls content."
         raise Exception
 
     cardioJson = {
@@ -157,19 +169,19 @@ def tableToJson(folder):
             raise Exception
         weightsJson = createJson(weightsData,weightsJson)
 
-    f = open(CARDIO, "w")
+    f = open(FOLDER + gym + "_" + CARDIO, "w")
     f.write(js.dumps(cardioJson, indent=2))
     f.close()
 
-    f = open(WEIGHTS, "w")
+    f = open(FOLDER + gym + "_" + WEIGHTS, "w")
     f.write(js.dumps(weightsJson, indent=2))
     f.close()
 
-def main(folder):
+def main(gym, folder):
     print(os.path.basename(__file__) + " is running...\n")
     try:
-        tableToJson(folder)
-        print("JSON files created.")
+        tableToJson(gym, folder)
+        print("JSON files created for " + gym + ".")
     except Exception:
         print(errorMessage)
     except:
@@ -177,9 +189,12 @@ def main(folder):
 
 if __name__ == "__main__":
     try:
-        folder = sys.argv[1]
-        main(folder)
+        gym = sys.argv[1]
+        gymId = GYMS.get(gym.replace(" ", "-").lower())
+        if (gymId == None):
+            print(gym + " is not a valid gym.")
+            raise Exception
+        folder = sys.argv[2]
+        main(gymId, folder)
     except:
-        print("Usage: python parse.py <folder>")
-
-# TODO: dynamic gym id, autoname id_startDate_endDate.json
+        print("Usage: python parse.py <gym name> <spreadsheets folder>")
