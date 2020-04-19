@@ -25,14 +25,14 @@ WEIGHTS = "weights.json"
 
 # Cornell gyms
 GYMS = {
-    "appel": "Appel",
-    "helennewman": "HelenNewman",
-    "helen-newman": "HelenNewman",
-    "noyes": "Noyes",
-    "teagleup": "TeagleUp",
-    "teagle-up": "TeagleUp",
-    "teagledown": "TeagleDown",
-    "teagle-down": "TeagleDown",
+    "appel": "appel",
+    "helennewman": "helen-newman",
+    "helen-newman": "helen-newman",
+    "noyes": "noyes",
+    "teagleup": "teagle-up",
+    "teagle-up": "teagle-up",
+    "teagledown": "teagle-down",
+    "teagle-down": "teagle-down",
 }
 
 # time mapping from 6:15am to 11:45pm in 30min intervals
@@ -141,11 +141,11 @@ def tableToJson(gym, folder):
         raise Exception
 
     cardioJson = {
-        "id": "noyes",
+        "id": gym,
         "history": {}
     }
     weightsJson = {
-        "id": "noyes",
+        "id": gym,
         "history": {}
     }
     for filename in files:
